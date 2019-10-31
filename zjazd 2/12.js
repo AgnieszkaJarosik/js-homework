@@ -3,7 +3,7 @@
 let date = new Date().getDay();
 
 function calcDays (currDay, dayOfWeek) {
-  return (7 + dayOfWeek - currDay) % 7;
+  return (dayOfWeek - currDay + 7) % 7;
 }
 
 function showTillFriday (currDay) {

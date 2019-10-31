@@ -26,3 +26,4 @@ function sumArray (arr) {
 }
 
 console.log( sumArray(array) );
+
