@@ -7,21 +7,18 @@
 //  A function setOperation() that sets the field from previous sentence 
 //  and a Calculate function that makes calculation and returns its value. 
 
-const add = (x, y) => x+y;
-const sub = (x, y) => x-y;
-const multi = (x, y) => x*y;
-const div = (x, y) => x/y;
 
 const calcObject = (() => {
   let x, y;
-  let mathOperation = function(){}; 
+  let mathOperation = null; 
 
   const setOperation = (paramX, operation,  paramY) => {
     if (typeof(paramX)==='number' && typeof(paramY)==='number'){
       x = paramX;
       y = paramY;
     } else {
-      return 'podaj liczby';
+      x = null;
+      y = null;
     }
 
     if (typeof(operation)==='string'){
@@ -38,10 +35,9 @@ const calcObject = (() => {
         case '/': 
           mathOperation = div;
           break;
-        default:
-          console.log('Ustaw działanie');
-          break;
       }
+    } else {
+      mathOperation = null;
     }
   }
   
@@ -51,19 +47,30 @@ const calcObject = (() => {
     } else {
       return 'Ustaw parametry działania';
     }
-    
   }
 
   return {
-    setOperation: setOperation,
-    calculate: calculate
+    setOperation,
+    calculate
   }
 })();
+
+const add = (x, y) => x+y;
+const sub = (x, y) => x-y;
+const multi = (x, y) => x*y;
+const div = (x, y) => x/y;
+
 
 calcObject.setOperation();
 console.log(calcObject.calculate());
 
+calcObject.setOperation('','*','');
+console.log(calcObject.calculate());
+
 calcObject.setOperation(4,2,4);
+console.log(calcObject.calculate());
+
+calcObject.setOperation('','+','');
 console.log(calcObject.calculate());
 
 calcObject.setOperation(4,'*',3);

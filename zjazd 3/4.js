@@ -26,8 +26,8 @@ const objectsArray = [
 ];
 
 objectsArray.forEach( (object, id, array) => {
-  let nextObject;
-  (id+1) < array.length ? nextObject = array[id+1] : nextObject = array[0]; 
-  console.log(object.operation.call(nextObject));
+  let nextId = (id+1) % array.length;
+
+  console.log(object.operation.call(array[nextId]));
 });
 

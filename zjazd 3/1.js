@@ -12,15 +12,17 @@ const iifeObject = (() => {
 
   const showValue = () => {
     if(value) {
-      return value;
+      console.log(value); 
     } else {
-      return 'value not set';
+      console.log('Set value first'); 
     }
   }
 
   const setValue = (val) => {
     if (typeof(val)==='string' || typeof(val)==='number') {
       value = val;
+    } else {
+      value = null;
     }
   }
 
@@ -31,25 +33,29 @@ const iifeObject = (() => {
       value = newVal.join('');
     } else if (typeof(value)==='number') {
       value *= (-1);
-    } else {
-      console.log('Value not set');
-    }
+    } 
   }
 
   return {
-    showValue: showValue,
-    setValue: setValue,
-    reverseValue: reverseValue
+    showValue,
+    setValue,
+    reverseValue
   }
 })();
 
-console.log(iifeObject.showValue());
-iifeObject.setValue(77)
-console.log(iifeObject.showValue());
+iifeObject.showValue();
+
+iifeObject.setValue(11);
 iifeObject.reverseValue();
-console.log(iifeObject.showValue());
+iifeObject.showValue();
+
+iifeObject.setValue('kot');
+iifeObject.reverseValue();
+iifeObject.showValue();
+
+
+iifeObject.setValue([1,2,3]);
+iifeObject.showValue();
+
 iifeObject.value = 1;
-console.log(iifeObject.showValue());
-iifeObject.setValue('kukułka');
-iifeObject.reverseValue();
-console.log(iifeObject.showValue());
+iifeObject.showValue();
