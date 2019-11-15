@@ -35,6 +35,9 @@ const calcObject = (() => {
         case '/': 
           mathOperation = div;
           break;
+        default:
+          mathOperation = null;
+          break;
       }
     } else {
       mathOperation = null;
@@ -67,7 +70,7 @@ console.log(calcObject.calculate());
 calcObject.setOperation('','*','');
 console.log(calcObject.calculate());
 
-calcObject.setOperation(4,2,4);
+calcObject.setOperation(4,'',4);
 console.log(calcObject.calculate());
 
 calcObject.setOperation('','+','');
