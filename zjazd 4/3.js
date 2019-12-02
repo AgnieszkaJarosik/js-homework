@@ -19,8 +19,17 @@ const mainObjects = dataObjects.map(dataObject => {
   return new MainEntry(index, _id, cost, Type, company, date);
 })
 
+
 const giveData = {
-  showSpendingsByYear (objects) {
+  showCompanyGain(objects){
+    const companiesGains = reduceArray(objects, "company");
+    return roundPropInObject(companiesGains);
+  },
+  showSpendingsByTransaction(objects){
+    const spendings = reduceArray(objects, "type");
+    return roundPropInObject(spendings);
+  },
+  showSpendingsByYear(objects){
     const spendings = objects.reduce( (acc, curr) => { 
       let year = curr.detailsOfPayent.date.getFullYear();
       if (year in acc) {
@@ -31,33 +40,7 @@ const giveData = {
       }
       return acc;
     }, {});
-
-    return roundPropInObject(spendings);
-  },
-  showCompanyGain(objects){
-    const companiesGains = objects.reduce( (acc, curr) => { 
-      if (curr.detailsOfPayent.company in acc) {
-        acc[curr.detailsOfPayent.company] += curr.cost;
-      }
-      else {
-        acc[curr.detailsOfPayent.company] = curr.cost;
-      }
-      return acc;
-    }, {});
-
-    return roundPropInObject(companiesGains);
-  },
-  showSpendingsByTransaction(objects){
-    const spendings = objects.reduce( (acc, curr) => { 
-      if (curr.detailsOfPayent.type in acc) {
-        acc[curr.detailsOfPayent.type] += curr.cost;
-      }
-      else {
-        acc[curr.detailsOfPayent.type] = curr.cost;
-      }
-      return acc;
-    }, {});
-  
+    
     return roundPropInObject(spendings);
   },
   showSpendingsByMonth(objects){
@@ -75,7 +58,8 @@ const giveData = {
     return roundPropInObject(spendings);
   },
   showSpendingsByDay(objects){
-    const spendings = objects.reduce( (acc, curr) => { 
+    const spendings = 
+    objects.reduce( (acc, curr) => { 
       let day = curr.detailsOfPayent.date.getDay();
       if (day in acc) {
         acc[day] += curr.cost;
@@ -96,7 +80,17 @@ function roundPropInObject(obj) {
   }
   return obj;
 }
-
+function reduceArray(arr, data) {
+  return arr.reduce( (acc, curr) => { 
+    if (curr.detailsOfPayent[data] in acc) {
+      acc[curr.detailsOfPayent[data]] += curr.cost;
+    }
+    else {
+      acc[curr.detailsOfPayent[data]] = curr.cost;
+    }
+    return acc;
+  }, {});
+}
 
 console.log(giveData.showSpendingsByYear(mainObjects));
 console.log(giveData.showCompanyGain(mainObjects));
