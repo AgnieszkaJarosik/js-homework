@@ -19,7 +19,6 @@ const mainObjects = dataObjects.map(dataObject => {
   return new MainEntry(index, _id, cost, Type, company, date);
 })
 
-
 const giveData = {
   showCompanyGain(objects){
     const companiesGains = reduceArray(objects, "company");
@@ -30,46 +29,15 @@ const giveData = {
     return roundPropInObject(spendings);
   },
   showSpendingsByYear(objects){
-    const spendings = objects.reduce( (acc, curr) => { 
-      let year = curr.detailsOfPayent.date.getFullYear();
-      if (year in acc) {
-        acc[year] += curr.cost;
-      }
-      else {
-        acc[year] = curr.cost;
-      }
-      return acc;
-    }, {});
-    
+    const spendings = reduceArray(objects, "date", Date.prototype.getFullYear);
     return roundPropInObject(spendings);
   },
   showSpendingsByMonth(objects){
-    const spendings = objects.reduce( (acc, curr) => { 
-      let month = curr.detailsOfPayent.date.getMonth();
-      if (month in acc) {
-        acc[month] += curr.cost;
-      }
-      else {
-        acc[month] = curr.cost;
-      }
-      return acc;
-    }, {});
-    
+    const spendings = reduceArray(objects, "date", Date.prototype.getMonth);
     return roundPropInObject(spendings);
   },
   showSpendingsByDay(objects){
-    const spendings = 
-    objects.reduce( (acc, curr) => { 
-      let day = curr.detailsOfPayent.date.getDay();
-      if (day in acc) {
-        acc[day] += curr.cost;
-      }
-      else {
-        acc[day] = curr.cost;
-      }
-      return acc;
-    }, {});
-
+    const spendings = reduceArray(objects, "date", Date.prototype.getDay);
     return roundPropInObject(spendings);
   }
 }
@@ -80,13 +48,16 @@ function roundPropInObject(obj) {
   }
   return obj;
 }
-function reduceArray(arr, data) {
+
+function reduceArray(arr, data, callback) {
   return arr.reduce( (acc, curr) => { 
-    if (curr.detailsOfPayent[data] in acc) {
-      acc[curr.detailsOfPayent[data]] += curr.cost;
+    let value;
+    callback ? value = callback.call(curr.detailsOfPayent[data]) : value = curr.detailsOfPayent[data];
+    if (value in acc) {
+      acc[value] += curr.cost;
     }
     else {
-      acc[curr.detailsOfPayent[data]] = curr.cost;
+      acc[value] = curr.cost;
     }
     return acc;
   }, {});
