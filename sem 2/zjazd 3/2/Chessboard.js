@@ -1,13 +1,10 @@
-'use strict';
-const FigureFactory = require("./FigureFactory");
-
-const figureFactory = new FigureFactory();
-
 class Chessboard {
-  constructor(figures) {
+  constructor(figureFactory) {
     this.board = this.createArray();
     this.gameplay = [];
-    this.figures = figures;
+    this.figureFactory = figureFactory;
+    this.figures = ['king', 'queen', 'rook', 'bishop', 'knight'];
+    this.capture = [];
   }
 
   createArray(){
@@ -25,13 +22,13 @@ class Chessboard {
     let occured = false;
     do{
       let newX = Math.floor(Math.random() * this.board.length);
-      let newY = Math.floor(Math.random() * this.board[newX].length);
+      let newY = Math.floor(Math.random() * this.board[0].length);
       const figure = this.figures[Math.floor(Math.random() * this.figures.length)];
   
-      occured = this.gameplay.find( figure => figure.position.x === newX && figure.position.y===newY);
+      occured = this.gameplay.find( figure => figure.position.x===newX && figure.position.y===newY);
       
       if(!occured){
-        let fig = figureFactory.getFigure(figure, newX, newY);
+        let fig = this.figureFactory.getFigure(figure, newX, newY);
         this.gameplay.push(fig);
         this.board[newX][newY] = fig;
         return fig;
@@ -56,6 +53,15 @@ class Chessboard {
       })
     })
     return captures;
+  }
+
+  playGame(){
+    do {
+      const newFigure = this.addFigure();
+      this.capture = this.checkForCapture();
+    } while(this.capture.length===0)
+    this.showArr();
+    return this.capture;
   }
 
   showArr(){

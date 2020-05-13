@@ -1,14 +1,13 @@
-const { equal } = require("./utils");
-
 class Player {
-  constructor(){
+  constructor(id){
+    this.id = id;
     this.memory = {};
     this.actual = {
       card: null,
       pos: null
     }
     this.score = 0;
-    this.cards = [];      // zebrane pary kart
+    this.cards = [];
   }
 
   firstTry(allowedPos){
@@ -21,10 +20,17 @@ class Player {
   }
 
   secondTry(allowedPos){
-    const myPos = allowedPos.filter( pos => !equal(pos,this.actual.pos));   
+    const myPos = allowedPos.filter( pos => pos !== this.actual.pos);
 
-    if(this.memory[this.actual.card] && !equal(this.memory[this.actual.card], this.actual.pos)){
-        return this.memory[this.actual.card];
+    if(this.memory[this.actual.card]){
+      if(this.memory[this.actual.card][0]!==this.actual.pos){
+        return this.memory[this.actual.card][0];
+      } else if(this.memory[this.actual.card].length===2){
+        return this.memory[this.actual.card][1];
+      } else {
+        this.addToMemory(this.actual.card, this.actual.pos);
+        return this.getRandomPos(myPos);
+      }
     } else {
         this.addToMemory(this.actual.card, this.actual.pos);
         return this.getRandomPos(myPos);
@@ -43,7 +49,11 @@ class Player {
   }
 
   addToMemory(card, pos){
-    this.memory[card] = pos;
+    if(this.memory[card]){
+      this.memory[card][0]!==pos && this.memory[card].push(pos);
+    } else {
+      this.memory[card] = [pos];
+    }
   }
 
   givePoint(card1, pos1, card2, pos2){
@@ -53,19 +63,9 @@ class Player {
   }
 
   showScore(){
-    console.log(`Score: ${this.score}`);
+    console.log(`Player_${this.id}, score: ${this.score}`);
     console.log(this.cards);
   }
 }
 
-class PlayersFactory {
-  getPlayers(num){
-    const players = [];
-    for(let i=0; i<num; i++){
-      players.push(new Player());
-    }
-    return players;
-  }
-}
-
-module.exports = PlayersFactory;
+module.exports = Player;

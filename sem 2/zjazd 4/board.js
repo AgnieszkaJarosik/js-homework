@@ -4,28 +4,22 @@ const board = [
   ["", "", "", "", "", ""],
   ["", "", "", "", "", ""]
 ];
-
 const figures = ["!", "@", "#", "$", "%", "^", "&", "*", "=", "+", "-", "_"];
 
 function getRandonBoard() {
-  const newBoard = board.map( row =>  row.slice() );
-  figures.map( figure => {
-    fillField(figure, newBoard);
-    fillField(figure, newBoard);
-  })
-  return newBoard;
-}
+  const newBoard = [];
+  const newFigures = figures.concat(figures);
 
-function fillField(figure, board){
-  let set = false;
-  while(!set){
-    const randX = Math.floor(Math.random() * board.length);
-    const randY = Math.floor(Math.random() * board[0].length);
-    if(board[randX][randY]===""){
-      board[randX][randY] = figure;
-      set = true;
-    } 
+
+  for(let j=0; newFigures.length>0; j++){
+    const figure = newFigures.splice((Math.floor(Math.random() * newFigures.length)), 1);
+    newBoard.push({
+      id: j,
+      sign: figure[0]
+    });
   }
+
+  return newBoard;
 }
 
 module.exports = {

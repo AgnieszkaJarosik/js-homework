@@ -1,5 +1,3 @@
-'use strict';
-
 class Figure {
   constructor(a,b){
     this.position = {x: a, y: b};
@@ -7,7 +5,6 @@ class Figure {
     this.sign;
     this.name;
   }
-  
 }
 
 class King extends Figure {
@@ -162,6 +159,7 @@ class FigureFactory {
     getFigure(figure, a, b){
       figure = figure.toLowerCase();
       let returnedObject = null;
+      
       if(a<0 || a>7 || b<0 || b>7) {
         throw new Error('Bad position');
       }
